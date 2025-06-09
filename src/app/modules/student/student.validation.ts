@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 // Validation schema for student model
-export const studentValidationSchema = Joi.object({
+export const studentJoiValidationSchema = Joi.object({
   id: Joi.string().min(3).max(20).required(),
   name: Joi.object({
     firstName: Joi.string()
@@ -58,6 +58,8 @@ export const studentValidationSchema = Joi.object({
 });
 
 // Function to validate student data
-export const validateStudent = (studentData: unknown) => {
-  return studentValidationSchema.validate(studentData, { abortEarly: false });
+export const validateJoiStudent = (studentData: unknown) => {
+  return studentJoiValidationSchema.validate(studentData, {
+    abortEarly: false,
+  });
 };
