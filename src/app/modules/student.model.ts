@@ -5,6 +5,8 @@ import {
   IStudent,
   IUserName,
 } from './student/student.interface';
+import validator from 'validator';
+
 // // Define the schemas for the Student model
 const userNameSchema = new Schema<IUserName>({
   firstName: {
@@ -25,6 +27,7 @@ const userNameSchema = new Schema<IUserName>({
     type: String,
     required: false,
     trim: true,
+
     maxlength: [20, 'Middle name must be less than or equal to 20 characters'],
     minlength: [3, 'Middle name must be more than or equal to 3 characters'],
   },
@@ -32,8 +35,12 @@ const userNameSchema = new Schema<IUserName>({
     type: String,
     required: [true, 'Last name is required'],
     trim: true,
-    maxlength: [20, 'Last name must be less than or equal to 20 characters'],
-    minlength: [3, 'Last name must be more than or equal to 3 characters'],
+    validate: {
+      validator: (value: string) => {
+        return validator.isAlpha(value);
+      },
+      message: '{VALUE} must be alphanumeric',
+    },
   },
 });
 // Define the schema for the Gurdian model
@@ -160,7 +167,17 @@ const StudentSchema = new Schema<IStudent>({
   dateOfBirth: {
     type: String,
   },
-  email: { type: String, required: [true, 'Email is required'] },
+  email: {
+    type: String,
+    required: [true, 'Email is required'],
+    unique: true,
+    validate: {
+      validator: (value: string) => {
+        return validator.isEmail(value);
+      },
+      message: '{VALUE} is not a valid email address',
+    },
+  },
   contactNumber: {
     type: String,
     required: [true, 'Contact number is required'],
