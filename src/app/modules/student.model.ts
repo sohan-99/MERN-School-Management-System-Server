@@ -3,7 +3,9 @@ import {
   IGurdian,
   ILocalGuardian,
   IStudent,
+  IStudentMethods,
   IUserName,
+  StudentModel,
 } from './student/student.interface';
 import validator from 'validator';
 
@@ -143,7 +145,7 @@ const localGuardianSchema = new Schema<ILocalGuardian>({
     ],
   },
 });
-const StudentSchema = new Schema<IStudent>({
+const StudentSchema = new Schema<IStudent, StudentModel, IStudentMethods>({
   id: {
     type: String,
     required: [true, 'Student ID is required'],
@@ -218,5 +220,13 @@ const StudentSchema = new Schema<IStudent>({
   },
 });
 
+StudentSchema.methods.isUserExist = async function (id: string) {
+  const existingUser = await studentModel.findOne({ id });
+  return existingUser;
+};
+
 // Create the Student model
-export const studentModel = model<IStudent>('Student', StudentSchema);
+export const studentModel = model<IStudent, StudentModel>(
+  'Student',
+  StudentSchema,
+);

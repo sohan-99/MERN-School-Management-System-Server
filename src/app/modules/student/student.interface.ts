@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+import { Model } from 'mongoose';
+
 export type IGurdian = {
   fatherName: string;
   fatherOccupation: string;
@@ -34,3 +37,13 @@ export type IStudent = {
   profileImg?: string;
   isActive: 'Active' | 'blocked';
 };
+
+export type IStudentMethods = {
+  isUserExist: (id: string) => Promise<IStudent | null>;
+};
+
+export type StudentModel = Model<
+  IStudent,
+  Record<string, never>,
+  IStudentMethods
+>;
