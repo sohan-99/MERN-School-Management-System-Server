@@ -37,13 +37,19 @@ export type IStudent = {
   profileImg?: string;
   isActive: 'Active' | 'blocked';
 };
+// createing a custom method for the student model
+// export type IStudentMethods = {
+//   isUserExist: (id: string) => Promise<IStudent | null>;
+// };
 
-export type IStudentMethods = {
+// static
+export interface IStudentModel extends Model<IStudent> {
   isUserExist: (id: string) => Promise<IStudent | null>;
-};
+}
 
 export type StudentModel = Model<
   IStudent,
-  Record<string, never>,
-  IStudentMethods
+  Record<string, never>
+  // ,
+  // IStudentMethods
 >;

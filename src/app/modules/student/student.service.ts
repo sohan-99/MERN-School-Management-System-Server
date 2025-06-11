@@ -3,14 +3,22 @@ import { IStudent } from './student.interface';
 // create data into the database
 // and return the result
 const createStudentINtoDB = async (studentData: IStudent) => {
-  // const result = await studentModel.create(student);
-  const Istudent = new studentModel(studentData);
-
-  if (await Istudent.isUserExist(studentData.id)) {
+  if (await studentModel.isUserExist(studentData.id)) {
     throw new Error('Student with this ID already exists');
   }
+  const result = await studentModel.create(studentData);
 
-  const result = await Istudent.save();
+  // static methods
+
+  // custom method to check if the user already exists
+  // const Istudent = new studentModel(studentData);
+
+  // if (await Istudent.isUserExist(studentData.id)) {
+  //   throw new Error('Student with this ID already exists');
+  // }
+
+  // const result = await Istudent.save();
+  // static method to check if the user already exists
 
   return result;
 };
