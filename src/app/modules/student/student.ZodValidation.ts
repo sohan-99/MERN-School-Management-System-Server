@@ -2,6 +2,14 @@ import { z } from 'zod';
 
 export const studentZodValidationSchema = z.object({
   id: z.string().min(3).max(20),
+  password: z
+    .string()
+    .min(6, {
+      message: 'Password must be more than or equal to 6 characters',
+    })
+    .max(20, {
+      message: 'Password must be less than or equal to 20 characters',
+    }),
   name: z.object({
     firstName: z
       .string()

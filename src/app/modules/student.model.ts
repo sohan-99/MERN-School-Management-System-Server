@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
 import {
   IGurdian,
@@ -8,7 +9,8 @@ import {
   StudentModel,
 } from './student/student.interface';
 import validator from 'validator';
-
+import bcrypt from 'bcryptjs';
+import config from '../config';
 // // Define the schemas for the Student model
 const userNameSchema = new Schema<IUserName>({
   firstName: {
@@ -159,6 +161,12 @@ const StudentSchema = new Schema<
     minlength: [3, 'Student ID must be more than or equal to 3 characters'],
     unique: true,
   },
+  password: {
+    type: String,
+    required: [true, 'Password is required'],
+    trim: true,
+    minlength: [6, 'Password must be more than or equal to 6 characters'],
+  },
   name: {
     type: userNameSchema,
     required: true,
@@ -223,6 +231,19 @@ const StudentSchema = new Schema<
     enum: ['Active', 'blocked'],
     default: 'Active',
   },
+});
+
+// pre save middleware /hook :will work on save  function
+StudentSchema.pre('save', async function (next) {
+  // console.log(this , 'pre hook:we will save data');
+  // Hash the password before saving
+  const user = this;
+  user.password = await bcrypt.hash(user.password, Number(config.salt));
+  next();
+});
+// post save middleware /hook
+StudentSchema.post('save', function (doc) {
+  console.log(doc, 'post hook:we will saved our data');
 });
 
 // creating custom static method
