@@ -152,85 +152,105 @@ const StudentSchema = new Schema<
   StudentModel
   // ,
   //  IStudentMethods
->({
-  id: {
-    type: String,
-    required: [true, 'Student ID is required'],
-    trim: true,
-    maxlength: [20, 'Student ID must be less than or equal to 20 characters'],
-    minlength: [3, 'Student ID must be more than or equal to 3 characters'],
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-    trim: true,
-    minlength: [6, 'Password must be more than or equal to 6 characters'],
-  },
-  name: {
-    type: userNameSchema,
-    required: true,
-  },
-  gender: {
-    type: String,
-    enum: {
-      values: ['male', 'female', 'other'],
-      message: "Gender must be either 'male', 'female', or 'other'",
+>(
+  {
+    id: {
+      type: String,
+      required: [true, 'Student ID is required'],
+      trim: true,
+      maxlength: [20, 'Student ID must be less than or equal to 20 characters'],
+      minlength: [3, 'Student ID must be more than or equal to 3 characters'],
+      unique: true,
     },
-    required: true,
-  },
-  dateOfBirth: {
-    type: String,
-  },
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-    validate: {
-      validator: (value: string) => {
-        return validator.isEmail(value);
+    password: {
+      type: String,
+      required: [true, 'Password is required'],
+      trim: true,
+      minlength: [6, 'Password must be more than or equal to 6 characters'],
+    },
+    name: {
+      type: userNameSchema,
+      required: true,
+    },
+    gender: {
+      type: String,
+      enum: {
+        values: ['male', 'female', 'other'],
+        message: "Gender must be either 'male', 'female', or 'other'",
       },
-      message: '{VALUE} is not a valid email address',
+      required: true,
+    },
+    dateOfBirth: {
+      type: String,
+    },
+    email: {
+      type: String,
+      required: [true, 'Email is required'],
+      unique: true,
+      validate: {
+        validator: (value: string) => {
+          return validator.isEmail(value);
+        },
+        message: '{VALUE} is not a valid email address',
+      },
+    },
+    contactNumber: {
+      type: String,
+      required: [true, 'Contact number is required'],
+      trim: true,
+    },
+    emargencyContact: {
+      type: String,
+      required: [true, 'Emergency contact is required'],
+      trim: true,
+    },
+    bloodGroup: {
+      type: String,
+      enum: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'],
+    },
+    presentAddress: {
+      type: String,
+      required: [true, 'Present address is required'],
+    },
+    permanentAddress: {
+      type: String,
+      required: [true, 'Permanent address is required'],
+    },
+    gurdian: {
+      type: GurdianSchema,
+      required: true,
+      trim: true,
+    },
+    localGuardian: {
+      type: localGuardianSchema,
+      required: true,
+      trim: true,
+    },
+    profileImg: { type: String, required: false },
+    isActive: {
+      type: String,
+      enum: ['Active', 'blocked'],
+      default: 'Active',
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
-  contactNumber: {
-    type: String,
-    required: [true, 'Contact number is required'],
-    trim: true,
+  {
+    toJSON: {
+      virtuals: true,
+    },
   },
-  emargencyContact: {
-    type: String,
-    required: [true, 'Emergency contact is required'],
-    trim: true,
-  },
-  bloodGroup: {
-    type: String,
-    enum: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'],
-  },
-  presentAddress: {
-    type: String,
-    required: [true, 'Present address is required'],
-  },
-  permanentAddress: {
-    type: String,
-    required: [true, 'Permanent address is required'],
-  },
-  gurdian: {
-    type: GurdianSchema,
-    required: true,
-    trim: true,
-  },
-  localGuardian: {
-    type: localGuardianSchema,
-    required: true,
-    trim: true,
-  },
-  profileImg: { type: String, required: false },
-  isActive: {
-    type: String,
-    enum: ['Active', 'blocked'],
-    default: 'Active',
-  },
+);
+
+StudentSchema.virtual('fullName').get(function () {
+  return (
+    this.name.firstName +
+    (this.name.middleName ? ' ' + this.name.middleName : '') +
+    ' ' +
+    this.name.lastName
+  );
 });
 
 // pre save middleware /hook :will work on save  function
@@ -242,8 +262,20 @@ StudentSchema.pre('save', async function (next) {
   next();
 });
 // post save middleware /hook
-StudentSchema.post('save', function (doc) {
-  console.log(doc, 'post hook:we will saved our data');
+StudentSchema.post('save', function (doc, next) {
+  // console.log(doc, 'post hook:we will saved our data');
+  doc.password = '';
+  next();
+});
+// query middleware
+// StudentSchema.pre('find', function (next) {
+//   // console.log(this, 'query middleware:we will find data');
+//   this.find({isDeleted: {$ne: true}});
+//   next();
+// });
+StudentSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
 });
 
 // creating custom static method

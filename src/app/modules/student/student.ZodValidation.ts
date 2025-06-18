@@ -56,6 +56,7 @@ export const studentZodValidationSchema = z.object({
   }),
   profileImg: z.string().url().optional(),
   isActive: z.enum(['Active', 'blocked']).default('Active'),
+  isDeleted: z.boolean(),
 });
 
 export const validateZodStudent = (studentData: unknown) => {

@@ -37,6 +37,7 @@ export type IStudent = {
   localGuardian: ILocalGuardian;
   profileImg?: string;
   isActive: 'Active' | 'blocked';
+  isDeleted: boolean;
 };
 // createing a custom method for the student model
 // export type IStudentMethods = {
