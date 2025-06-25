@@ -7,10 +7,10 @@ import {
   // IStudentMethods,
   IUserName,
   StudentModel,
-} from './student/student.interface';
+} from '../student/student.interface';
 import validator from 'validator';
-import bcrypt from 'bcryptjs';
-import config from '../config';
+// import bcrypt from 'bcryptjs';
+// import config from '../../config';
 // // Define the schemas for the Student model
 const userNameSchema = new Schema<IUserName>({
   firstName: {
@@ -150,8 +150,8 @@ const localGuardianSchema = new Schema<ILocalGuardian>({
 const StudentSchema = new Schema<
   IStudent,
   StudentModel
-  // ,
-  //  IStudentMethods
+// ,
+//  IStudentMethods
 >(
   {
     id: {
@@ -162,12 +162,13 @@ const StudentSchema = new Schema<
       minlength: [3, 'Student ID must be more than or equal to 3 characters'],
       unique: true,
     },
-    password: {
-      type: String,
-      required: [true, 'Password is required'],
-      trim: true,
-      minlength: [6, 'Password must be more than or equal to 6 characters'],
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, 'UserID is required'],
+      unique: true,
+      ref: 'User',
     },
+
     name: {
       type: userNameSchema,
       required: true,
@@ -227,11 +228,6 @@ const StudentSchema = new Schema<
       trim: true,
     },
     profileImg: { type: String, required: false },
-    isActive: {
-      type: String,
-      enum: ['Active', 'blocked'],
-      default: 'Active',
-    },
     isDeleted: {
       type: Boolean,
       default: false,
@@ -254,13 +250,13 @@ StudentSchema.virtual('fullName').get(function () {
 });
 
 // pre save middleware /hook :will work on save  function
-StudentSchema.pre('save', async function (next) {
-  // console.log(this , 'pre hook:we will save data');
-  // Hash the password before saving
-  const user = this;
-  user.password = await bcrypt.hash(user.password, Number(config.salt));
-  next();
-});
+// StudentSchema.pre('save', async function (next) {
+//   // console.log(this , 'pre hook:we will save data');
+//   // Hash the password before saving
+//   const user = this;
+//   user.password = await bcrypt.hash(user.password, Number(config.salt));
+//   next();
+// });
 // post save middleware /hook
 StudentSchema.post('save', function (doc, next) {
   // console.log(doc, 'post hook:we will saved our data');
@@ -280,7 +276,7 @@ StudentSchema.pre('find', function (next) {
 
 // creating custom static method
 StudentSchema.statics.isUserExist = async function (id: string) {
-  const existingUser = await studentModel.findOne({ id });
+  const existingUser = await Student.findOne({ id });
   return existingUser;
 };
 
@@ -290,7 +286,7 @@ StudentSchema.statics.isUserExist = async function (id: string) {
 // };
 
 // Create the Student model
-export const studentModel = model<IStudent, StudentModel>(
+export const Student = model<IStudent, StudentModel>(
   'Student',
   StudentSchema,
 );

@@ -1,4 +1,6 @@
-import { studentZodValidationSchema } from '../student/student.ZodValidation';
+
+import { Request, Response } from 'express';
+import { UserService } from './user.service';
 
 const isZodError = (err: unknown): err is { name: string; errors: unknown } => {
   if (typeof err === 'object' && err !== null) {
@@ -11,10 +13,13 @@ const isZodError = (err: unknown): err is { name: string; errors: unknown } => {
 // Create a new student
 const createStudent = async (req: Request, res: Response) => {
   try {
-    const { student: studentData } = req.body;
-    const zodParsedData = studentZodValidationSchema.parse(studentData);
+    const {password, student: studentData } = req.body;
+    // const zodParsedData = studentZodValidationSchema.parse(studentData);
 
-    const result = await studentService.createStudentINtoDB(zodParsedData);
+    const result = await UserService.createStudentINtoDB(
+      password,
+      studentData,
+    );
 
     res.status(200).json({
       success: true,
@@ -23,7 +28,7 @@ const createStudent = async (req: Request, res: Response) => {
     });
   } catch (err) {
     if (isZodError(err)) {
-      return res.status(400).json({
+       res.status(400).json({
         success: false,
         message: 'Validation failed',
         error: (err as { errors: unknown }).errors,
@@ -35,4 +40,8 @@ const createStudent = async (req: Request, res: Response) => {
       error: err,
     });
   }
+};
+
+export const UserController = {
+  createStudent,
 };

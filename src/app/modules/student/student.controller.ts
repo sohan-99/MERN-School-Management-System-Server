@@ -24,7 +24,7 @@ const getSingleStudent = async (req: Request, res: Response) => {
     const { studentId } = req.params;
     const result = await studentService.getSingleStudentFromDB(studentId);
     if (!result) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: 'Student not found',
       });

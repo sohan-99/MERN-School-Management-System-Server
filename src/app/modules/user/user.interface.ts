@@ -6,3 +6,4 @@ export type IUser = {
   status: 'in-progress' | 'blocked';
   isDeleted: boolean;
 };
+

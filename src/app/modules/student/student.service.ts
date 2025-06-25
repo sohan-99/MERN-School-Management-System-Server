@@ -1,13 +1,14 @@
-import { studentModel } from '../student.model';
+import { Student } from "./student.model";
+
 
 // get all students from the database
 const getAllStudentsFromDB = async () => {
-  const result = await studentModel.find();
+  const result = await Student.find();
   return result;
 };
 // get single student by id from the database
 const getSingleStudentFromDB = async (id: string) => {
-  const result = await studentModel.findOne({ id });
+  const result = await Student.findOne({ id });
   return result;
 };
 // delete student
@@ -17,7 +18,7 @@ const getSingleStudentFromDB = async (id: string) => {
 // };
 
 const deleteStudentFromDB = async (id: string) => {
-  const result = await studentModel.updateOne({ id }, { isDeleted: true });
+  const result = await Student.updateOne({ id }, { isDeleted: true });
   return result;
 };
 export const studentService = {
