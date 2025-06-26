@@ -2,10 +2,10 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { StudentRoutes } from './app/modules/student/student.route';
 import { UserRoute } from './app/modules/user/user.route';
+import globalErrorHandler from './app/middlwares/globalErrorHandler';
 
 const app = express();
-
-// Middleware to parse JSON bodies
+// middleware
 app.use(express.json());
 app.use(cors());
 
@@ -13,7 +13,9 @@ app.use(cors());
 app.use('/api/v1/students', StudentRoutes);
 app.use('/api/v1/users', UserRoute);
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World      ???');
+  res.send('i am the server of the universe 🌌 running babe');
 });
+
+app.use(globalErrorHandler);
 
 export default app;

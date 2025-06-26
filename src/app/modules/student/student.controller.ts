@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { studentService } from './student.service';
 
 // Get all students
-const getallStudents = async (req: Request, res: Response) => {
+const getallStudents = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await studentService.getAllStudentsFromDB();
     res.status(200).json({
@@ -11,15 +11,11 @@ const getallStudents = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to retrieve students',
-      error: error instanceof Error ? error.message : String(error),
-    });
+    next(error);
   }
 };
 // get single student by id
-const getSingleStudent = async (req: Request, res: Response) => {
+const getSingleStudent = async (req: Request, res: Response, next: NextFunction    ) => {
   try {
     const { studentId } = req.params;
     const result = await studentService.getSingleStudentFromDB(studentId);
@@ -35,14 +31,10 @@ const getSingleStudent = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to retrieve student',
-      error: error instanceof Error ? error.message : String(error),
-    });
+    next(error);
   }
 };
-const deleteStudent = async (req: Request, res: Response) => {
+const deleteStudent = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { studentId } = req.params;
     const result = await studentService.deleteStudentFromDB(studentId);
@@ -53,12 +45,7 @@ const deleteStudent = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message:
-        error instanceof Error ? error.message : 'Failed to delete student',
-      error: error,
-    });
+    next(error);
   }
 };
 

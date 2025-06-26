@@ -1,5 +1,5 @@
 
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { UserService } from './user.service';
 
 const isZodError = (err: unknown): err is { name: string; errors: unknown } => {
@@ -11,9 +11,9 @@ const isZodError = (err: unknown): err is { name: string; errors: unknown } => {
 };
 
 // Create a new student
-const createStudent = async (req: Request, res: Response) => {
+const createStudent = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const {password, student: studentData } = req.body;
+    const { password, student: studentData } = req.body;
     // const zodParsedData = studentZodValidationSchema.parse(studentData);
 
     const result = await UserService.createStudentINtoDB(
@@ -34,11 +34,7 @@ const createStudent = async (req: Request, res: Response) => {
         error: (err as { errors: unknown }).errors,
       });
     }
-    res.status(500).json({
-      success: false,
-      message: err instanceof Error ? err.message : 'something went wrong',
-      error: err,
-    });
+    next(err);
   }
 };
 

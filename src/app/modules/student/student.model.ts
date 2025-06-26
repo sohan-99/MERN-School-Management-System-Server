@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
+
 import { Schema, model } from 'mongoose';
 import {
   IGurdian,
@@ -9,8 +9,6 @@ import {
   StudentModel,
 } from '../student/student.interface';
 import validator from 'validator';
-// import bcrypt from 'bcryptjs';
-// import config from '../../config';
 // // Define the schemas for the Student model
 const userNameSchema = new Schema<IUserName>({
   firstName: {
@@ -249,20 +247,7 @@ StudentSchema.virtual('fullName').get(function () {
   );
 });
 
-// pre save middleware /hook :will work on save  function
-// StudentSchema.pre('save', async function (next) {
-//   // console.log(this , 'pre hook:we will save data');
-//   // Hash the password before saving
-//   const user = this;
-//   user.password = await bcrypt.hash(user.password, Number(config.salt));
-//   next();
-// });
-// post save middleware /hook
-StudentSchema.post('save', function (doc, next) {
-  // console.log(doc, 'post hook:we will saved our data');
-  doc.password = '';
-  next();
-});
+
 // query middleware
 // StudentSchema.pre('find', function (next) {
 //   // console.log(this, 'query middleware:we will find data');
