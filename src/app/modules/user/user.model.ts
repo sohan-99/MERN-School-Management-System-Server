@@ -11,7 +11,6 @@ const userSchema = new Schema<IUser>(
     },
     password: {
       type: String,
-
     },
     needPasswordChange: {
       type: Boolean,
@@ -36,7 +35,6 @@ const userSchema = new Schema<IUser>(
     timestamps: true,
   },
 );
-
 
 userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, Number(config.salt));

@@ -1,11 +1,17 @@
 import { NextFunction, Request, Response } from 'express';
 import { studentService } from './student.service';
-
+import sendResponse from '../../utils/sendResponse';
+import { StatusCodes } from 'http-status-codes';
 // Get all students
-const getallStudents = async (req: Request, res: Response, next: NextFunction) => {
+const getallStudents = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const result = await studentService.getAllStudentsFromDB();
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
       success: true,
       message: 'Students retrieved successfully',
       data: result,
@@ -15,17 +21,24 @@ const getallStudents = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 // get single student by id
-const getSingleStudent = async (req: Request, res: Response, next: NextFunction    ) => {
+const getSingleStudent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { studentId } = req.params;
     const result = await studentService.getSingleStudentFromDB(studentId);
     if (!result) {
-      res.status(404).json({
+      sendResponse(res, {
+        statusCode: StatusCodes.NOT_FOUND,
         success: false,
         message: 'Student not found',
       });
     }
-    res.status(200).json({
+
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
       success: true,
       message: 'Student retrieved successfully',
       data: result,
@@ -34,12 +47,17 @@ const getSingleStudent = async (req: Request, res: Response, next: NextFunction 
     next(error);
   }
 };
-const deleteStudent = async (req: Request, res: Response, next: NextFunction) => {
+const deleteStudent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { studentId } = req.params;
     const result = await studentService.deleteStudentFromDB(studentId);
 
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
       success: true,
       message: 'Student deleted successfully',
       data: result,

@@ -1,4 +1,3 @@
-
 import { Schema, model } from 'mongoose';
 import {
   IGurdian,
@@ -148,8 +147,8 @@ const localGuardianSchema = new Schema<ILocalGuardian>({
 const StudentSchema = new Schema<
   IStudent,
   StudentModel
-// ,
-//  IStudentMethods
+  // ,
+  //  IStudentMethods
 >(
   {
     id: {
@@ -247,7 +246,6 @@ StudentSchema.virtual('fullName').get(function () {
   );
 });
 
-
 // query middleware
 // StudentSchema.pre('find', function (next) {
 //   // console.log(this, 'query middleware:we will find data');
@@ -271,7 +269,4 @@ StudentSchema.statics.isUserExist = async function (id: string) {
 // };
 
 // Create the Student model
-export const Student = model<IStudent, StudentModel>(
-  'Student',
-  StudentSchema,
-);
+export const Student = model<IStudent, StudentModel>('Student', StudentSchema);

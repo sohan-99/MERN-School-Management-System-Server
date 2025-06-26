@@ -1,6 +1,7 @@
-
 import { NextFunction, Request, Response } from 'express';
 import { UserService } from './user.service';
+import sendResponse from '../../utils/sendResponse';
+import { StatusCodes } from 'http-status-codes';
 
 const isZodError = (err: unknown): err is { name: string; errors: unknown } => {
   if (typeof err === 'object' && err !== null) {
@@ -11,27 +12,30 @@ const isZodError = (err: unknown): err is { name: string; errors: unknown } => {
 };
 
 // Create a new student
-const createStudent = async (req: Request, res: Response, next: NextFunction) => {
+const createStudent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { password, student: studentData } = req.body;
     // const zodParsedData = studentZodValidationSchema.parse(studentData);
 
-    const result = await UserService.createStudentINtoDB(
-      password,
-      studentData,
-    );
+    const result = await UserService.createStudentINtoDB(password, studentData);
 
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: StatusCodes.CREATED,
       success: true,
-      message: 'Student is created succesfully',
+      message: 'User created successfully',
       data: result,
     });
   } catch (err) {
     if (isZodError(err)) {
-       res.status(400).json({
+      sendResponse(res, {
+        statusCode: StatusCodes.BAD_REQUEST,
         success: false,
         message: 'Validation failed',
-        error: (err as { errors: unknown }).errors,
+        data: (err as { errors: unknown }).errors,
       });
     }
     next(err);
