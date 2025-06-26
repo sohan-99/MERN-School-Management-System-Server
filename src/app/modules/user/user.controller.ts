@@ -11,7 +11,6 @@ const isZodError = (err: unknown): err is { name: string; errors: unknown } => {
   return false;
 };
 
-// Create a new student
 const createStudent = async (
   req: Request,
   res: Response,
@@ -19,8 +18,6 @@ const createStudent = async (
 ) => {
   try {
     const { password, student: studentData } = req.body;
-    // const zodParsedData = studentZodValidationSchema.parse(studentData);
-
     const result = await UserService.createStudentINtoDB(password, studentData);
 
     sendResponse(res, {

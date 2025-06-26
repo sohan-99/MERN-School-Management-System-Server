@@ -3,12 +3,11 @@ import {
   IGurdian,
   ILocalGuardian,
   IStudent,
-  // IStudentMethods,
   IUserName,
   StudentModel,
 } from '../student/student.interface';
 import validator from 'validator';
-// // Define the schemas for the Student model
+
 const userNameSchema = new Schema<IUserName>({
   firstName: {
     type: String,
@@ -44,7 +43,7 @@ const userNameSchema = new Schema<IUserName>({
     },
   },
 });
-// Define the schema for the Gurdian model
+
 const GurdianSchema = new Schema<IGurdian>({
   fatherName: { type: String, required: [true, 'Father name is required'] },
   fatherOccupation: {
@@ -101,7 +100,7 @@ const GurdianSchema = new Schema<IGurdian>({
     ],
   },
 });
-// Define the schema for the localGuardian model
+
 const localGuardianSchema = new Schema<ILocalGuardian>({
   name: { type: String, required: [true, 'Local guardian name is required'] },
   occupation: {
@@ -144,12 +143,7 @@ const localGuardianSchema = new Schema<ILocalGuardian>({
     ],
   },
 });
-const StudentSchema = new Schema<
-  IStudent,
-  StudentModel
-  // ,
-  //  IStudentMethods
->(
+const StudentSchema = new Schema<IStudent, StudentModel>(
   {
     id: {
       type: String,
@@ -257,7 +251,6 @@ StudentSchema.pre('find', function (next) {
   next();
 });
 
-// creating custom static method
 StudentSchema.statics.isUserExist = async function (id: string) {
   const existingUser = await Student.findOne({ id });
   return existingUser;
@@ -268,5 +261,4 @@ StudentSchema.statics.isUserExist = async function (id: string) {
 //   return existingUser;
 // };
 
-// Create the Student model
 export const Student = model<IStudent, StudentModel>('Student', StudentSchema);

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { studentService } from './student.service';
 import sendResponse from '../../utils/sendResponse';
 import { StatusCodes } from 'http-status-codes';
-// Get all students
+
 const getallStudents = async (
   req: Request,
   res: Response,
@@ -20,7 +20,7 @@ const getallStudents = async (
     next(error);
   }
 };
-// get single student by id
+
 const getSingleStudent = async (
   req: Request,
   res: Response,

@@ -1,11 +1,10 @@
 import { Student } from './student.model';
 
-// get all students from the database
 const getAllStudentsFromDB = async () => {
   const result = await Student.find();
   return result;
 };
-// get single student by id from the database
+
 const getSingleStudentFromDB = async (id: string) => {
   const result = await Student.findOne({ id });
   return result;
