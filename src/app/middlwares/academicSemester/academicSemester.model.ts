@@ -1,31 +1,11 @@
 import { Schema, model } from 'mongoose';
+import { IAcademicSemester } from './academicSemester.interface';
 import {
-  IAcademicSemester,
-  IAcademicSemesterCode,
-  IAcademicSemesterName,
-  IMonths,
-} from './academicSemester.interface';
+  academicSemesterCode,
+  academicSemesterName,
+  months,
+} from './academicSemester.const';
 
-const months: IMonths[] = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-const academicSemesterName: IAcademicSemesterName[] = [
-  'Autumn',
-  'Summer',
-  'Fall',
-];
-const academicSemesterCode: IAcademicSemesterCode[] = ['01', '02', '03'];
 const AcademicSemesterSchema = new Schema<IAcademicSemester>({
   name: {
     type: String,
