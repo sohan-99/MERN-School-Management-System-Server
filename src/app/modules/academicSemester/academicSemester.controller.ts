@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import catchAsyncFunction from '../../utils/catchAsyncFunction';
 import { AcademicSemesterService } from './academicSemester.service';
 import sendResponse from '../../utils/sendResponse';
-import { StatusCodes } from 'http-status-codes';
 
 const createAcademicSemester = catchAsyncFunction(
   async (req: Request, res: Response) => {

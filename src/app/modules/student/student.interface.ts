@@ -34,9 +34,10 @@ export type IStudent = {
   bloodGroup?: 'O+' | 'O-' | 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-';
   presentAddress: string;
   permanentAddress: string;
-  gurdian: IGurdian;
+  guardian: IGurdian;
   localGuardian: ILocalGuardian;
   profileImg?: string;
+  admissionSemester: Types.ObjectId;
   isDeleted: boolean;
 };
 

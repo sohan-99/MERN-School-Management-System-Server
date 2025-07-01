@@ -208,7 +208,7 @@ const StudentSchema = new Schema<IStudent, StudentModel>(
       type: String,
       required: [true, 'Permanent address is required'],
     },
-    gurdian: {
+    guardian: {
       type: GurdianSchema,
       required: true,
       trim: true,
@@ -219,6 +219,10 @@ const StudentSchema = new Schema<IStudent, StudentModel>(
       trim: true,
     },
     profileImg: { type: String, required: false },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicSemester',
+    },
     isDeleted: {
       type: Boolean,
       default: false,
