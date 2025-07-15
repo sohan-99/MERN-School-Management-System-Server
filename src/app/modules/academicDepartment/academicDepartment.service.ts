@@ -43,6 +43,7 @@ const updateAcademicDepartmentInDB = async (
   }
   return result;
 };
+
 export const AcademicDepartmentService = {
   createAcademicDepartmentIntoDB,
   getAllAcademicDepartmentsFromDB,
